@@ -1,0 +1,162 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="1.0.0" author="pkokovin">
+        <createTable tableName="users">
+            <column name="id" type="INTEGER" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="username" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="age" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created" type="TIMESTAMP" defaultValue="NOW()">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="updated" type="TIMESTAMP" defaultValue="NOW()">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.0.1" author="pkokovin">
+        <createTable tableName="roles">
+            <column name="id" type="INTEGER" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="name" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="created" type="TIMESTAMP" defaultValue="NOW()">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="updated" type="TIMESTAMP" defaultValue="NOW()">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.0.2" author="pkokovin">
+        <createTable tableName="managers">
+            <column name="id" type="INTEGER" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="username" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created" type="TIMESTAMP" defaultValue="NOW()">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="updated" type="TIMESTAMP" defaultValue="NOW()">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="status" type="VARCHAR(25)" defaultValue="ACTIVE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.0.3" author="pkokovin">
+        <createTable tableName="manager_roles">
+            <column name="manager_id" type="INTEGER">
+            </column>
+
+            <column name="role_id" type="INTEGER">
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.0.4" author="pkokovin">
+        <addForeignKeyConstraint baseTableName="manager_roles"
+                                 baseColumnNames="manager_id"
+                                 constraintName="fk_manager_roles_manager"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedTableName="managers"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="1.0.5" author="pkokovin">
+        <addForeignKeyConstraint baseTableName="manager_roles"
+                                 baseColumnNames="role_id"
+                                 constraintName="fk_manager_roles_roles"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedTableName="roles"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="1.0.6" author="pkokovin">
+        <insert tableName="roles">
+            <column name="name" value="ROLE_USER"></column>
+        </insert>
+
+        <insert tableName="roles">
+            <column name="name" value="ROLE_ADMIN"></column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="1.0.7" author="pkokovin">
+        <createTable tableName="errors">
+            <column name="id" type="INTEGER" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="message" type="TEXT">
+            </column>
+
+            <column name="created" type="TIMESTAMP" defaultValue="NOW()">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="updated" type="TIMESTAMP" defaultValue="NOW()">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.0.8" author="pkokovin">
+        <insert tableName="managers">
+            <column name="username" value="admin"></column>
+            <column name="email" value="testmail@ya.ru"></column>
+            <column name="password" value="$2a$04$RWYC0XsKDlJffBIUupt0BuQqgCLcW0fYYGSpnlauYYSNzmSmWnpu2"></column>
+            <column name="status" value="ACTIVE"></column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="1.0.9" author="pkokovin">
+        <insert tableName="manager_roles">
+            <column name="manager_id" value="1"></column>
+            <column name="role_id" value="1"></column>
+            <column name="manager_id" value="1"></column>
+            <column name="role_id" value="2"></column>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
