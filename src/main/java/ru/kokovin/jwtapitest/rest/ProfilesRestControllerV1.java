@@ -27,11 +27,14 @@ import ru.kokovin.jwtapitest.util.exceptions.ResourceNotFoundException;
 public class ProfilesRestControllerV1 {
   @Autowired UserService service;
 
+  /** Returns array of UserDto. */
   @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
   @GetMapping
   @ResponseStatus(value = HttpStatus.OK)
-  public List<UserDto> getAll() {
-    return service.getAll().stream().map(UserDto::fromUser).collect(Collectors.toList());
+  public UserDto[] getAll() {
+    List<UserDto> userDtos =
+        service.getAll().stream().map(UserDto::fromUser).collect(Collectors.toList());
+    return userDtos.toArray(new UserDto[0]);
   }
 
   /** Get user controller returns from @Params name, email, age. */

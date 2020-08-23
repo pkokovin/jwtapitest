@@ -1,5 +1,8 @@
 package ru.kokovin.jwtapitest.rest;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -12,6 +15,7 @@ import static ru.kokovin.jwtapitest.UserTestData.USER_DTO_2;
 import static ru.kokovin.jwtapitest.UserTestData.USER_DTO_DUBLICATE_EMAIL_2;
 import static ru.kokovin.jwtapitest.UserTestData.USER_DTO_WITH_DIFF_CASE_EMAIL;
 
+import java.util.Arrays;
 import java.util.Collections;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -51,12 +55,42 @@ class ProfilesRestControllerV1Test extends AbstractRestControllerTest {
     AuthenticationResponse authenticationResponse = getAuthHeadersForManager("admin", "test");
 
     HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
     headers.add("Authorization", "Bearer_" + authenticationResponse.getJwt());
 
-    ResponseEntity<String> response =
-        restTemplate.exchange(
-            USERS_GET_URL, HttpMethod.GET, new HttpEntity<>(headers), String.class);
+    HttpEntity<UserDto> request = new HttpEntity<>(USER_DTO_1, headers);
 
+    ResponseEntity<UserResponseDto> response =
+        restTemplate.postForEntity(USERS_SET_URL, request, UserResponseDto.class);
+    User user = null;
+    if (response.getBody() != null && response.getBody().getIdUser() != null) {
+      user = repository.findById(response.getBody().getIdUser()).orElse(null);
+    }
+    assertNotNull(user);
+    assertEquals(user.getName(), USER_DTO_1.getName().toLowerCase());
+    assertEquals(response.getStatusCode(), HttpStatus.OK);
+
+    request = new HttpEntity<>(USER_DTO_2, headers);
+
+    response = restTemplate.postForEntity(USERS_SET_URL, request, UserResponseDto.class);
+    user = null;
+    if (response.getBody() != null && response.getBody().getIdUser() != null) {
+      user = repository.findById(response.getBody().getIdUser()).orElse(null);
+    }
+    assertNotNull(user);
+    assertEquals(user.getName(), USER_DTO_2.getName().toLowerCase());
+    assertEquals(response.getStatusCode(), HttpStatus.OK);
+
+    ResponseEntity<UserDto[]> response2 =
+        restTemplate.exchange(
+            USERS_GET_URL, HttpMethod.GET, new HttpEntity<>(headers), UserDto[].class);
+
+    UserDto[] userDtos = response2.getBody();
+
+    assertNotNull(userDtos);
+    assertThat(Arrays.asList(userDtos), hasSize(2));
+    assertThat(userDtos[0].getName(), is(USER_DTO_1.getName().toLowerCase()));
     assertEquals(response.getStatusCode(), HttpStatus.OK);
   }
 
