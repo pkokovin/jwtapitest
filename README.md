@@ -1,3 +1,6 @@
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/afc003b5c88c487da5ce159cf9d48345)](https://app.codacy.com/manual/pkokovin/jwtapitest?utm_source=github.com&utm_medium=referral&utm_content=pkokovin/jwtapitest&utm_campaign=Badge_Grade_Dashboard)
+
 <b>Тестовое задание.</b>
 
 <b>Задача:</b>
