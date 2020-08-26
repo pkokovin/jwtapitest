@@ -47,7 +47,7 @@ public class GlobalExceptionHandler {
             new ErrorDetails(new Date(), "Such email alredy exists", request.getDescription(false));
         saveError(errorDetails);
         return new ResponseEntity<>(
-            ErrorDetailsDto.fromErrorDetails(errorDetails), HttpStatus.CONFLICT);
+            ErrorDetailsDto.fromErrorDetails(errorDetails), HttpStatus.FORBIDDEN);
       }
     }
     return new ResponseEntity<>(

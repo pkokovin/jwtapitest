@@ -217,7 +217,7 @@ class ProfilesRestControllerV1Test extends AbstractRestControllerTest {
     if (response2.getBody() != null) {
       assertTrue(response2.getBody().contains("Such email alredy exists"));
     }
-    assertEquals(response2.getStatusCode(), HttpStatus.CONFLICT);
+    assertEquals(response2.getStatusCode(), HttpStatus.FORBIDDEN);
   }
 
   @Test
