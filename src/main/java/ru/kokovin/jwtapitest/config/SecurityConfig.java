@@ -1,5 +1,6 @@
 package ru.kokovin.jwtapitest.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import ru.kokovin.jwtapitest.security.jwt.JwtConfigurer;
 import ru.kokovin.jwtapitest.security.jwt.JwtTokenProvider;
 
+@RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -28,11 +30,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   private static final String SWAGGER_ENDPOINT_HTML = "/swagger-ui.html";
   private static final String SWAGGER_ENDPOINT = "/swagger-ui/**";
   private static final String SWAGGER_API_DOCS_ENDPOINT = "/v3/api-docs/**";
-
-  @Autowired
-  public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
-    this.jwtTokenProvider = jwtTokenProvider;
-  }
 
   @Bean
   @Override
